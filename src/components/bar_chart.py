@@ -9,12 +9,16 @@ from . import ids
 def render(app: Dash, data: pd.DataFrame) -> html.Div:
     @app.callback(
         Output(ids.BAR_CHART, "children"),
-        Input(ids.YEAR_DROPDOWN, "value")
+        [
+            Input(ids.YEAR_DROPDOWN, "value"),
+            Input(ids.MONTH_DROPDOWN, "value")
+        ]
+
     )
-    def update_bar_chart(years: list[str]) -> html.Div:
+    def update_bar_chart(years: list[str], months: list[str]) -> html.Div:
         #this function takes as input what is specificed by the Input of the
         #callback above
-        filtered_data = data.query("year in @years")
+        filtered_data = data.query("year in @years and month in @months")
         if filtered_data.shape[0]==0:
             return html.Div("No data selected")
 
